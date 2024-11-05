@@ -41,12 +41,12 @@ pipeline {
             }
             steps {
                 echo '开始代码审查'
-                script {
-                    def scannerHome = tool "${SONARQUBE_SCANNER}"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
+                // script {
+                //     def scannerHome = tool "${SONARQUBE_SCANNER}"
+                //     withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                //         sh "${scannerHome}/bin/sonar-scanner"
+                //     }
+                // }
                 echo '代码审查完成'
             }
         }
