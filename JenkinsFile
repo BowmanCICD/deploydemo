@@ -88,7 +88,9 @@ spec:
             }
             steps {
                 echo '开始拉取代码'
-                checkout scmGit(branches: [[name: '*/*']], extensions: [], userRemoteConfigs: [[credentialsId: "${GITLAB_CRED}", url: "${GITLAB_URL}"]])
+                checkout scmGit(userRemoteConfigs: [
+                    [ url: 'https://github.com/jenkinsci/git-plugin' ]
+                ])
                 script {
                     branchName = (env.GIT_BRANCH ?: 'master').split('/')[-1]
                 }
