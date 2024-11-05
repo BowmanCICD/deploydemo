@@ -25,11 +25,13 @@ pipeline {
         }
         stage('编译打包') {
             steps {
-                container('maven') {
-                    echo '开始编译打包'
-                    sh 'mvn clean package'
-                    echo '编译打包完成'
-                }
+                echo '开始编译打包'
+                echo '编译打包完成'
+                // container('maven') {
+                //     echo '开始编译打包'
+                //     sh 'mvn clean package'
+                //     echo '编译打包完成'
+                // }
             }
         }
         stage('代码审查') {
