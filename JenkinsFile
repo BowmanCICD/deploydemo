@@ -89,7 +89,7 @@ spec:
             steps {
                 echo '开始拉取代码'
                 checkout scmGit(userRemoteConfigs: [
-                    [ url: 'https://github.com/jenkinsci/git-plugin' ]
+                    [ url: 'https://github.com/BowmanCICD/spring-boot-demo.git' ]
                 ])
                 script {
                     branchName = (env.GIT_BRANCH ?: 'master').split('/')[-1]
