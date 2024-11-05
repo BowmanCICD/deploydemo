@@ -58,24 +58,24 @@ pipeline {
             }
             steps {
                 echo '开始构建镜像'
-                script {
-                    IMAGE_TAG = branchName == 'master' ? VersionNumber(versionPrefix: 'p', versionNumberString: '${BUILD_DATE_FORMATTED, "yyMMdd"}.${BUILDS_TODAY}') :
-                                branchName == 'test' ? VersionNumber(versionPrefix: 't', versionNumberString: '${BUILD_DATE_FORMATTED, "yyMMdd"}.${BUILDS_TODAY}') :
-                                error("Unsupported branch: ${params.BRANCH}")
-                    IMAGE_NAME = "${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_APP}:${IMAGE_TAG}"
-                    sh "nerdctl build --insecure-registry -t ${IMAGE_NAME} ."
-                }
-                echo '构建镜像完成'
-                echo '开始推送镜像'
-                withCredentials([usernamePassword(credentialsId: "${HARBOR_CRED}", passwordVariable: 'HARBOR_PASSWORD', usernameVariable: 'HARBOR_USERNAME')]) {
-                    sh """
-                        nerdctl login --insecure-registry ${HARBOR_URL} -u ${HARBOR_USERNAME} -p ${HARBOR_PASSWORD}
-                        nerdctl push --insecure-registry ${IMAGE_NAME}
-                    """
-                }
+                // script {
+                //     IMAGE_TAG = branchName == 'master' ? VersionNumber(versionPrefix: 'p', versionNumberString: '${BUILD_DATE_FORMATTED, "yyMMdd"}.${BUILDS_TODAY}') :
+                //                 branchName == 'test' ? VersionNumber(versionPrefix: 't', versionNumberString: '${BUILD_DATE_FORMATTED, "yyMMdd"}.${BUILDS_TODAY}') :
+                //                 error("Unsupported branch: ${params.BRANCH}")
+                //     IMAGE_NAME = "${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_APP}:${IMAGE_TAG}"
+                //     sh "nerdctl build --insecure-registry -t ${IMAGE_NAME} ."
+                // }
+                // echo '构建镜像完成'
+                // echo '开始推送镜像'
+                // withCredentials([usernamePassword(credentialsId: "${HARBOR_CRED}", passwordVariable: 'HARBOR_PASSWORD', usernameVariable: 'HARBOR_USERNAME')]) {
+                //     sh """
+                //         nerdctl login --insecure-registry ${HARBOR_URL} -u ${HARBOR_USERNAME} -p ${HARBOR_PASSWORD}
+                //         nerdctl push --insecure-registry ${IMAGE_NAME}
+                //     """
+                // }
                 echo '推送镜像完成'
                 echo '开始删除镜像'
-                sh "nerdctl rmi -f ${IMAGE_NAME}"
+                // sh "nerdctl rmi -f ${IMAGE_NAME}"
                 echo '删除镜像完成'
             }
         }
@@ -85,20 +85,20 @@ pipeline {
             }
             steps {
                 echo '开始修改资源清单'
-                script {
-                    def (NAME_SPACE, DOMAIN_NAME) = branchName == 'master' ? ['prod', 'demo.local.com'] :
-                                                     branchName == 'test' ? ['test', 'demo.test.com'] :
-                                                     error("Unsupported branch: ${params.BRANCH}")
-                }
-                contentReplace(configs: [fileContentReplaceConfig(configs: [
-                    fileContentReplaceItemConfig(replace: "${IMAGE_NAME}", search: 'IMAGE_NAME'),
-                    fileContentReplaceItemConfig(replace: "${NAME_SPACE}", search: 'NAME_SPACE'),
-                    fileContentReplaceItemConfig(replace: "${DOMAIN_NAME}", search: 'DOMAIN_NAME')],
-                    fileEncoding: 'UTF-8',
-                    filePath: "${YAML_NAME}",
-                    lineSeparator: 'Unix')])
+                // script {
+                //     def (NAME_SPACE, DOMAIN_NAME) = branchName == 'master' ? ['prod', 'demo.local.com'] :
+                //                                      branchName == 'test' ? ['test', 'demo.test.com'] :
+                //                                      error("Unsupported branch: ${params.BRANCH}")
+                // }
+                // contentReplace(configs: [fileContentReplaceConfig(configs: [
+                //     fileContentReplaceItemConfig(replace: "${IMAGE_NAME}", search: 'IMAGE_NAME'),
+                //     fileContentReplaceItemConfig(replace: "${NAME_SPACE}", search: 'NAME_SPACE'),
+                //     fileContentReplaceItemConfig(replace: "${DOMAIN_NAME}", search: 'DOMAIN_NAME')],
+                //     fileEncoding: 'UTF-8',
+                //     filePath: "${YAML_NAME}",
+                //     lineSeparator: 'Unix')])
                 echo '修改资源清单完成'
-                sh "kubectl apply -f ${YAML_NAME}"
+                // sh "kubectl apply -f ${YAML_NAME}"
                 echo '部署资源清单完成'
             }
         }
